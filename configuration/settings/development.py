@@ -1,9 +1,10 @@
 import os
 from .base import *
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['staging.titaniumtraining.online', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['titaniumtraining.pythonanywhere.com',
+                 '127.0.0.1', 'localhost']
 
 DATABASES = {
     'default': {
