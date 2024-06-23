@@ -52,7 +52,7 @@ class RegisterView(APIView):
         else:
             error_msg = str(serializer.errors)
             logger.error(f"Registration error: {error_msg}")
-            return CustomAPIException(detail=str(serializer.errors), status_code=status.HTTP_400_BAD_REQUEST)
+            return CustomAPIException(detail=str(serializer.errors), status_code=status.HTTP_400_BAD_REQUEST).get_full_details()
 
 
 class LoginView(TokenObtainPairView):
@@ -72,12 +72,12 @@ class LoginView(TokenObtainPairView):
             logger.info("Request data is valid.")
         except TokenError as e:
             logger.error(f"TokenError encountered: {e}")
-            raise CustomAPIException(
-                detail="Invalid token.", status_code=status.HTTP_401_UNAUTHORIZED)
+            return CustomAPIException(
+                detail="Invalid token.", status_code=status.HTTP_401_UNAUTHORIZED).get_full_details()
         except Exception as e:
             logger.error(f"Exception encountered: {e}")
-            raise CustomAPIException(detail=str(
-                e), status_code=status.HTTP_400_BAD_REQUEST)
+            return CustomAPIException(detail=str(
+                e), status_code=status.HTTP_400_BAD_REQUEST).get_full_details()
 
         logger.info("Login successful.")
         return custom_response(status_code=status.HTTP_200_OK, message="Success", data=serializer.validated_data)
@@ -100,7 +100,7 @@ class TokenRefreshView(TokenRefreshView):
         else:
             logger.error(
                 f"Token refresh failed with status code {response.status_code}.")
-            return CustomAPIException(detail="Token is invalid.", status_code=response.status_code, data=response.data)
+            return CustomAPIException(detail="Token is invalid.", status_code=response.status_code, data=response.data).get_full_details()
 
 
 class TokenVerifyView(TokenVerifyView):
@@ -120,7 +120,7 @@ class TokenVerifyView(TokenVerifyView):
         else:
             logger.error(
                 f"Token verification failed with status code {response.status_code}.")
-            return CustomAPIException(detail="Token is invalid or expired.", status_code=response.status_code, data=response.data)
+            return CustomAPIException(detail="Token is invalid or expired.", status_code=response.status_code, data=response.data).get_full_details()
 
 
 class UserProfileView(APIView):
@@ -139,7 +139,7 @@ class UserProfileView(APIView):
         except CustomUser.DoesNotExist:
             logger.error(f"User profile not found for email: {user_email}")
             raise CustomAPIException(
-                detail="User profile not found.", status_code=status.HTTP_404_NOT_FOUND)
+                detail="User profile not found.", status_code=status.HTTP_404_NOT_FOUND).get_full_details()
 
         serializers = UserSerializer(profile, data=request.data, partial=True)
         if serializers.is_valid():
@@ -151,7 +151,7 @@ class UserProfileView(APIView):
         logger.error(
             f"User profile update failed for email: {user_email}, errors: {serializers.errors}")
         raise CustomAPIException(
-            detail=serializers.errors, status_code=status.HTTP_400_BAD_REQUEST)
+            detail=serializers.errors, status_code=status.HTTP_400_BAD_REQUEST).get_full_details()
 
     def get(self, request):
         logger.info(
@@ -164,7 +164,7 @@ class UserProfileView(APIView):
         except CustomUser.DoesNotExist:
             logger.error(f"User profile not found for email: {email}")
             raise CustomAPIException(
-                detail="User profile not found.", status_code=status.HTTP_404_NOT_FOUND)
+                detail="User profile not found.", status_code=status.HTTP_404_NOT_FOUND).get_full_details()
 
         serializer = UserSerializer(profile)
         logger.info(f"User profile retrieved successfully for email: {email}")
@@ -205,7 +205,7 @@ class Logout(APIView):
             logger.error(
                 f"Logout failed for user: {request.user.email}, error: {str(e)}")
             raise CustomAPIException(detail=str(
-                e), status_code=status.HTTP_400_BAD_REQUEST)
+                e), status_code=status.HTTP_400_BAD_REQUEST).get_full_details()
 
 
 class ChangePasswordView(generics.UpdateAPIView):
@@ -232,7 +232,7 @@ class ChangePasswordView(generics.UpdateAPIView):
                     detail="Invalid Credential",
                     status_code=status.HTTP_400_BAD_REQUEST,
                     data={"old_password": ["Wrong password."]}
-                )
+                ).get_full_details()
 
             self.object.set_password(serializer.data.get("new_password"))
             self.object.save()
@@ -243,7 +243,7 @@ class ChangePasswordView(generics.UpdateAPIView):
 
         logger.error(
             f"Password update failed for user: {request.user.email}, errors: {serializer.errors}")
-        return CustomAPIException(detail=str(serializer.errors), status_code=status.HTTP_400_BAD_REQUEST)
+        return CustomAPIException(detail=str(serializer.errors), status_code=status.HTTP_400_BAD_REQUEST).get_full_details()
 
 
 class DeleteAccount(APIView):
@@ -267,10 +267,10 @@ class DeleteAccount(APIView):
             return custom_response(status_code=status.HTTP_200_OK, message="User deleted", data=None)
         except CustomUser.DoesNotExist:
             logger.warning(f"User not found for email: {user_email}")
-            return CustomAPIException(detail="User not found", status_code=status.HTTP_404_NOT_FOUND)
+            return CustomAPIException(detail="User not found", status_code=status.HTTP_404_NOT_FOUND).get_full_details()
         except Exception as e:
             logger.error(f"Error deleting user {user_email}: {str(e)}")
-            return CustomAPIException(detail=str(e), status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return CustomAPIException(detail=str(e), status_code=status.HTTP_500_INTERNAL_SERVER_ERROR).get_full_details()
 
     def perform_destroy(self, instance):
         instance.delete()
@@ -311,10 +311,10 @@ class EmailOTPAuthentication(APIView):
         otp_entered = request.data.get('otp')
 
         if email not in otp_storage:
-            return CustomAPIException(detail="OTP not sent for this email.", status_code=status.HTTP_400_BAD_REQUEST)
+            return CustomAPIException(detail="OTP not sent for this email.", status_code=status.HTTP_400_BAD_REQUEST).get_full_details()
 
         if otp_entered == otp_storage[email]:
             del otp_storage[email]
             return custom_response(status_code=status.HTTP_200_OK, message="Email verification successful.", data=None)
         else:
-            return CustomAPIException(detail="Incorrect OTP.", status_code=status.HTTP_400_BAD_REQUEST)
+            return CustomAPIException(detail="Incorrect OTP.", status_code=status.HTTP_400_BAD_REQUEST).get_full_details()

@@ -24,3 +24,6 @@ class CustomAPIException(APIException):
             'message': self.detail,
             'data': getattr(self, 'data', None)
         }, status=self.status_code)
+
+    def __str__(self):
+        return f"{self.detail} (status code: {self.status_code})"

@@ -30,6 +30,7 @@ INSTALLED_APPS = [
 
     # Third-party applications
     'drf_yasg',
+    'channels',
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
@@ -38,10 +39,8 @@ INSTALLED_APPS = [
 
     # Installed apps
     'authentication',
-    'class',
-    'assessment',
-    'academy',
     'course',
+    'chat',
     'subscription',
 
 ]
@@ -77,6 +76,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'configuration.wsgi.application'
+ASGI_APPLICATION = 'configuration.asgi.application'
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -181,7 +181,7 @@ SERVER_EMAIL = 'webmaster@titaniumtraining.online'
 SITE_ID = 1
 
 REST_FRAMEWORK = {
-    'EXCEPTION_HANDLER': 'utils.custom_exception.custom_exception_handler',
+    # 'EXCEPTION_HANDLER': 'utils.custom_exception.custom_exception_handler',
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
@@ -229,4 +229,14 @@ SIMPLE_JWT = {
     "TOKEN_BLACKLIST_SERIALIZER": "rest_framework_simplejwt.serializers.TokenBlacklistSerializer",
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
+}
+
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
 }

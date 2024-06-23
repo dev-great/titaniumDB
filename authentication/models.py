@@ -30,6 +30,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         max_length=15, null=True, blank=True)
     fcm_token = models.CharField(
         max_length=50, null=True, blank=True)
+    paystack_authorization_code = models.CharField(
+        max_length=250, null=True, blank=True)
     date_joined = models.DateTimeField(default=timezone.now)
 
     objects = CustomUserManager()
@@ -38,7 +40,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = 'email'
     PASSWORD_FIELD = 'password'
     REQUIRED_FIELDS = ['first_name', 'last_name',
-                       'phone_number', 'image', 'fcm_token']
+                       'phone_number', 'image', 'fcm_token', 'paystack_authorization_code']
 
     def __str__(self):
         return str(self.email)

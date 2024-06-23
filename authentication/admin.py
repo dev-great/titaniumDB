@@ -14,7 +14,7 @@ class CustomUserAdmin(admin.ModelAdmin):
                                        'groups', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
         (_('user_info'), {
-         'fields': ('phone_number', 'image', 'fcm_token', )}),
+         'fields': ('phone_number', 'image', 'fcm_token', 'paystack_authorization_code')}),
     )
     add_fieldsets = (
         (None, {
