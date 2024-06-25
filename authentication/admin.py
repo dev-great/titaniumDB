@@ -14,7 +14,7 @@ class CustomUserAdmin(admin.ModelAdmin):
                                        'groups', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
         (_('user_info'), {
-         'fields': ('phone_number', 'image', 'fcm_token', 'paystack_authorization_code')}),
+         'fields': ('phone_number', 'image', 'fcm_token', 'gender', 'dob', 'nationality', 'language', 'paystack_authorization_code')}),
     )
     add_fieldsets = (
         (None, {
@@ -22,9 +22,9 @@ class CustomUserAdmin(admin.ModelAdmin):
             'fields': ('email', 'password1', 'password2'),
         }),
     )
-    list_display = ['email', 'first_name', 'last_name', 'phone_number',
+    list_display = ['email', 'first_name', 'last_name', 'phone_number', 'gender', 'dob', 'nationality', 'language',
                     'is_staff', 'fcm_token',]
-    search_fields = ('email', 'first_name', 'last_name', 'phone_number',
+    search_fields = ('email', 'first_name', 'last_name', 'phone_number', 'gender', 'dob', 'nationality', 'language',
                      )
     ordering = ('email', )
 

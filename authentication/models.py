@@ -24,6 +24,18 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         max_length=50, null=True, blank=True)
     last_name = models.CharField(
         max_length=50, null=True, blank=True)
+
+    gender = models.CharField(
+        max_length=250, null=True, blank=True)
+
+    dob = models.CharField(
+        max_length=250, null=True, blank=True)
+
+    nationality = models.CharField(
+        max_length=250, null=True, blank=True)
+    language = models.CharField(
+        max_length=250, null=True, blank=True)
+
     image = models.ImageField(
         upload_to=get_image_upload_path, null=True, blank=True)
     phone_number = models.CharField(
@@ -40,7 +52,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = 'email'
     PASSWORD_FIELD = 'password'
     REQUIRED_FIELDS = ['first_name', 'last_name',
-                       'phone_number', 'image', 'fcm_token', 'paystack_authorization_code']
+                       'phone_number', 'image', 'fcm_token', 'paystack_authorization_code', 'gender', 'dob', 'nationality', 'language', ]
 
     def __str__(self):
         return str(self.email)

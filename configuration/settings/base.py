@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_rest_passwordreset',
     'fcm_django',
+    'cloudinary',
 
     # Installed apps
     'authentication',
@@ -169,13 +170,13 @@ LOGGING = {
 
 # Email settings for error reporting and user notifications
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'mail.privateemail.com'
+EMAIL_HOST = 'smtp.mail.yahoo.com'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = os.getenv('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
-DEFAULT_FROM_EMAIL = 'noreply@titaniumtraining.online'
-SERVER_EMAIL = 'webmaster@titaniumtraining.online'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = EMAIL_HOST_USER
 
 
 SITE_ID = 1

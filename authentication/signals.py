@@ -22,7 +22,7 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
             'titanium_training_user':  f"{reset_password_token.user.email}",
             'otp': f" {reset_password_token.key} "
         }
-        html_body = render_to_string("emails/otp_mail.html", merge_data)
+        html_body = render_to_string("otp_mail.html", merge_data)
         msg = EmailMultiAlternatives(subject="Titanium Training Password Reset", from_email=settings.EMAIL_HOST_USER, to=[
                                      reset_password_token.user.email], body=" ",)
         msg.attach_alternative(html_body, "text/html")
